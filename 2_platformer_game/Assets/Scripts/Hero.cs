@@ -29,7 +29,6 @@ public class Hero : MonoBehaviour {
 
     private Vector2 move = new Vector2(0, 0);
 
-
     // Start is called before the first frame update
     void Start() {
         body = GetComponent<Rigidbody2D>();
@@ -53,6 +52,10 @@ public class Hero : MonoBehaviour {
     }
 
     public void FixedUpdate() {
+        if (health <= 0) {
+            body.velocity = new Vector2(0, body.velocity.y);
+            return;
+        }
         if (Time.time - knockBackTime < knockBackDuration) {
             // Can not move when knocked or use force when knocked?
         } else {
@@ -98,6 +101,7 @@ public class Hero : MonoBehaviour {
 
     private void KnockBack(bool toRight) {
         knockBackTime = Time.time;
+        body.velocity = new Vector2(0, body.velocity.y);
         if (toRight) {
             body.AddForce(new Vector2(knockBackForce, 0), ForceMode2D.Impulse);
         } else {

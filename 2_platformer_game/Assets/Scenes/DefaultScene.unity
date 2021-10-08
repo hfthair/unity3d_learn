@@ -138,6 +138,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: earth2 (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 3989497264383971541, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3989497264383971562, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.x
       value: 16.646494
@@ -392,6 +396,27 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!1 &286895104 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1241967644136894423, guid: 7a300cada21bbf74e8c5a5875c4c223e, type: 3}
+  m_PrefabInstance: {fileID: 745530480}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &286895111
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 286895104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6fb7def7117f3846ba6dd53871abad7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  groundCheckLen: 0.26
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &390303050
 GameObject:
   m_ObjectHideFlags: 0
@@ -558,6 +583,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: earth2 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 3989497264383971541, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3989497264383971562, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.x
       value: 16.646494
@@ -629,7 +658,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1241967643592575546, guid: 7a300cada21bbf74e8c5a5875c4c223e, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.54
+      value: 9.25
       objectReference: {fileID: 0}
     - target: {fileID: 1241967643592575546, guid: 7a300cada21bbf74e8c5a5875c4c223e, type: 3}
       propertyPath: m_LocalPosition.z
@@ -663,9 +692,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1241967644136894422, guid: 7a300cada21bbf74e8c5a5875c4c223e, type: 3}
+      propertyPath: walkSpeed
+      value: 4.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1241967644136894423, guid: 7a300cada21bbf74e8c5a5875c4c223e, type: 3}
       propertyPath: m_Name
       value: hero
+      objectReference: {fileID: 0}
+    - target: {fileID: 1241967644136894424, guid: 7a300cada21bbf74e8c5a5875c4c223e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1241967644136894426, guid: 7a300cada21bbf74e8c5a5875c4c223e, type: 3}
       propertyPath: m_FlipX
@@ -1603,6 +1640,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: earth2
       objectReference: {fileID: 0}
+    - target: {fileID: 3989497264383971541, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
+      propertyPath: m_Layer
+      value: 6
+      objectReference: {fileID: 0}
     - target: {fileID: 3989497264383971562, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
       propertyPath: m_SpriteTilingProperty.newSize.x
       value: 16.646494
@@ -1671,7 +1712,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2020263731}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: earth
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1854,6 +1895,10 @@ PrefabInstance:
     - target: {fileID: 3989497264383971541, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
       propertyPath: m_Name
       value: earth1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3989497264383971541, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 3989497264383971563, guid: fcbc2875f79af5543b9c1e1d77ba6c0d, type: 3}
       propertyPath: m_RootOrder
