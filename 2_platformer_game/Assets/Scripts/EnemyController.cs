@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyController : MonoBehaviour {
-    public float groundCheckLen = 0.1f;
-    public bool showGroundCheck = false;
-    public LayerMask groundMask;
     private BoxCollider2D boxCollider;
     private Rigidbody2D body;
     private Hero hero;
-    private Vector2 groundCheckPos;
 
-    private bool movingRight;
+    private StateMachine stateMachine;
+    private StatePatrol statePatrol;
 
 
     // Start is called before the first frame update
@@ -20,44 +17,45 @@ public class EnemyController : MonoBehaviour {
         body = GetComponent<Rigidbody2D>();
         boxCollider = GetComponent<BoxCollider2D>();
 
-        movingRight = false;
-        hero.Move(movingRight);
+        stateMachine = new StateMachine();
+
+        statePatrol = new StatePatrol();
+        statePatrol.heroController = hero;
+        statePatrol.enemyController = this;
+        stateMachine.Init(statePatrol);
     }
 
     // Update is called once per frame
     void Update() {
-        PatrolUpdate();
+        if (stateMachine != null) {
+            stateMachine.Update();
+        }
+    }
+}
+
+public class StatePatrol : StateBase {
+    public EnemyController enemyController {get; set;}
+    public Hero heroController {get; set;}
+
+    private bool movingRight = false;
+
+    public override void OnEnter() {
+        movingRight = false;
+        heroController.Move(movingRight);
     }
 
-    private void PatrolUpdate() {
-        if (!GroundCheck()) {
+    public override void OnExit() {
+        heroController.Stop();
+    }
+
+    public override void Update() {
+        if (enemyController == null || heroController == null) {
+            return;
+        }
+        
+        if (!heroController.AIGroundDetect()) {
             movingRight = !movingRight;
-            hero.Move(movingRight);
-        }
-    }
-
-    private bool GroundCheck() {
-        Vector2 pos = GetGroundCheckPos();
-        RaycastHit2D[] detect = Physics2D.RaycastAll(pos, Vector2.down, groundCheckLen, groundMask);
-        if (showGroundCheck)
-            Debug.Log(detect.Length);
-        return detect.Length > 0;
-    }
-
-    private Vector2 GetGroundCheckPos() {
-        if (body.velocity.x > 0) {
-            return new Vector2(boxCollider.bounds.max.x, boxCollider.bounds.min.y);
-        } else if (body.velocity.x < 0) {
-            return boxCollider.bounds.min;
-        } else {
-            return new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
-        }
-    }
-
-    private void OnDrawGizmos() {
-        if (showGroundCheck && boxCollider && body) {
-            Vector2 pos = GetGroundCheckPos();
-            Gizmos.DrawLine(pos, new Vector2(pos.x, pos.y - groundCheckLen));
+            heroController.Move(movingRight);
         }
     }
 }

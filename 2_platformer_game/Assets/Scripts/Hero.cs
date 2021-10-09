@@ -24,7 +24,12 @@ public class Hero : MonoBehaviour {
     public float knockBackDuration = 0.5f;
     private float knockBackTime = 0f;
 
+    public float aiGroundDetectDepth = 0.1f;
+    public bool showAiGroundDetect = false;
+    public LayerMask aiGroundMask;
+
     private Rigidbody2D body;
+    private BoxCollider2D boxCollider;
     private Animator anim;
 
     private Vector2 move = new Vector2(0, 0);
@@ -32,6 +37,7 @@ public class Hero : MonoBehaviour {
     // Start is called before the first frame update
     void Start() {
         body = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
 
         health = healthMax;
@@ -137,16 +143,38 @@ public class Hero : MonoBehaviour {
         }
     }
 
-    private void OnDrawGizmos() {
-        if (showAttackArea)
-            Gizmos.DrawCube(attackPos.position, attackSize);
-    }
-
     private bool IsGrounded() {
         RaycastHit2D[] results = new RaycastHit2D[16];
         int count = body.Cast(Vector2.down, results, 0.1f);
 
         return count > 0;
+    }
+
+    // --------------- AI only functions -------------------------------------
+    
+    public bool AIGroundDetect() {
+        Vector2 pos = GetAIGroundDetectPos();
+        RaycastHit2D[] detect = Physics2D.RaycastAll(pos, Vector2.down, aiGroundDetectDepth, aiGroundMask);
+        return detect.Length > 0;
+    }
+
+    private Vector2 GetAIGroundDetectPos() {
+        if (body.velocity.x > 0) {
+            return new Vector2(boxCollider.bounds.max.x, boxCollider.bounds.min.y);
+        } else if (body.velocity.x < 0) {
+            return boxCollider.bounds.min;
+        } else {
+            return new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
+        }
+    }
+
+    private void OnDrawGizmos() {
+        if (showAttackArea)
+            Gizmos.DrawCube(attackPos.position, attackSize);
+        if (showAiGroundDetect && boxCollider != null) {
+            Vector2 pos = GetAIGroundDetectPos();
+            Gizmos.DrawLine(pos, new Vector2(pos.x, pos.y - aiGroundDetectDepth));
+        }
     }
 
 }
