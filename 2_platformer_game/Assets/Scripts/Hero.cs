@@ -24,29 +24,23 @@ public class Hero : MonoBehaviour {
     public float knockBackDuration = 0.5f;
     private float knockBackTime = 0f;
 
-    public float aiGroundDetectDepth = 0.1f;
-    public bool showAiGroundDetect = false;
-    public LayerMask aiGroundMask;
-
     private Rigidbody2D body;
-    private BoxCollider2D boxCollider;
     private Animator anim;
 
     private Vector2 move = new Vector2(0, 0);
 
     // Start is called before the first frame update
-    void Start() {
+    protected virtual void Start() {
         body = GetComponent<Rigidbody2D>();
-        boxCollider = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
 
         health = healthMax;
     }
 
     // Update is called once per frame
-    void Update() {
+    protected virtual void Update() {
         bool ground = IsGrounded();
-        if (anim.GetBool("ground") != ground) {
+        if (health > 0 && anim.GetBool("ground") != ground) {
             anim.SetBool("ground", ground);
         }
 
@@ -57,7 +51,7 @@ public class Hero : MonoBehaviour {
         }
     }
 
-    public void FixedUpdate() {
+    protected virtual void FixedUpdate() {
         if (health <= 0) {
             if (Time.time - knockBackTime >= knockBackDuration) {
                 body.velocity = new Vector2(0, body.velocity.y);
@@ -75,28 +69,39 @@ public class Hero : MonoBehaviour {
         }
     }
 
+    protected virtual void OnDrawGizmos() {
+        if (showAttackArea)
+            Gizmos.DrawCube(attackPos.position, attackSize);
+    }
+
+    // --------------------------- controls ---------------------------------------
     public void Move(bool right) {
+        if (health <= 0) return;
         if (right) move.x = walkSpeed;
         else move.x = -walkSpeed;
         anim.SetFloat("speed", Mathf.Abs(move.x));
     }
 
     public void Stop() {
+        if (health <= 0) return;
         move.x = 0f;
         anim.SetFloat("speed", 0);
     }
 
     public void Jump() {
+        if (health <= 0) return;
         if (IsGrounded()) {
             move.y = jumpSpeed;
         }
     }
 
     public void SlowdownJump() {
+        if (health <= 0) return;
         if (body.velocity.y > 0) move.y = body.velocity.y * jumpModifier;
     }
 
     public void TakeDamage(int[] damage) {
+        if (health <= 0) return;
         health = health - damage[0];
         if (health > 0) {
             anim.SetTrigger("hurt");
@@ -109,30 +114,32 @@ public class Hero : MonoBehaviour {
 
     private void KnockBack(bool toRight) {
         knockBackTime = Time.time;
-        body.velocity = new Vector2(0, body.velocity.y);
         if (toRight) {
-            body.AddForce(new Vector2(knockBackForce, 0), ForceMode2D.Impulse);
+            body.velocity = new Vector2(knockBackForce, body.velocity.y);
         } else {
-            body.AddForce(new Vector2(-knockBackForce, 0), ForceMode2D.Impulse);
+            body.velocity = new Vector2(-knockBackForce, body.velocity.y);
         }
     }
 
-    public void Die() {
-        anim.SetTrigger("die");
-        // Disable control (maybe seperate the move/input to another script)
-    }
-
     public void Attack() {
+        if (health <= 0) return;
         if (Time.time - lastAttackTime > attackInterval) {
             anim.SetTrigger("attack");
             lastAttackTime = Time.time;
         }
     }
 
+    public void Die() {
+        anim.SetFloat("speed", 0);
+        anim.SetTrigger("die");
+        // Disable control (maybe seperate the move/input to another script)
+    }
+
+    // --------------------------- controls ends ----------------------------------
+
     private void AttackHitBoxCheck() {
         Collider2D[] detected = Physics2D.OverlapBoxAll(attackPos.position, attackSize, 0, attackLayer);
         foreach (Collider2D target in detected) {
-            Debug.Log("hited: " + target.gameObject.name);
             int[] attackMessage = new int[2];
             attackMessage[0] = attackPower;
             attackMessage[1] = 1;
@@ -150,31 +157,5 @@ public class Hero : MonoBehaviour {
         return count > 0;
     }
 
-    // --------------- AI only functions -------------------------------------
-    
-    public bool AIGroundDetect() {
-        Vector2 pos = GetAIGroundDetectPos();
-        RaycastHit2D[] detect = Physics2D.RaycastAll(pos, Vector2.down, aiGroundDetectDepth, aiGroundMask);
-        return detect.Length > 0;
-    }
-
-    private Vector2 GetAIGroundDetectPos() {
-        if (body.velocity.x > 0) {
-            return new Vector2(boxCollider.bounds.max.x, boxCollider.bounds.min.y);
-        } else if (body.velocity.x < 0) {
-            return boxCollider.bounds.min;
-        } else {
-            return new Vector2(boxCollider.bounds.center.x, boxCollider.bounds.min.y);
-        }
-    }
-
-    private void OnDrawGizmos() {
-        if (showAttackArea)
-            Gizmos.DrawCube(attackPos.position, attackSize);
-        if (showAiGroundDetect && boxCollider != null) {
-            Vector2 pos = GetAIGroundDetectPos();
-            Gizmos.DrawLine(pos, new Vector2(pos.x, pos.y - aiGroundDetectDepth));
-        }
-    }
 
 }

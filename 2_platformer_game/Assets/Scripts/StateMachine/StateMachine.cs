@@ -23,4 +23,10 @@ public class StateMachine
             currentState.Update();
         }
     }
+
+    public void OnDrawGizmos() {
+        if (currentState != null) {
+            currentState.OnDrawGizmos();
+        }
+    }
 }
