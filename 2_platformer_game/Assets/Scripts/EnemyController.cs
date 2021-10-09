@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour {
     public float groundCheckLen = 0.1f;
+    public bool showGroundCheck = false;
     public LayerMask groundMask;
     private BoxCollider2D boxCollider;
     private Rigidbody2D body;
@@ -38,6 +39,8 @@ public class EnemyController : MonoBehaviour {
     private bool GroundCheck() {
         Vector2 pos = GetGroundCheckPos();
         RaycastHit2D[] detect = Physics2D.RaycastAll(pos, Vector2.down, groundCheckLen, groundMask);
+        if (showGroundCheck)
+            Debug.Log(detect.Length);
         return detect.Length > 0;
     }
 
@@ -52,7 +55,7 @@ public class EnemyController : MonoBehaviour {
     }
 
     private void OnDrawGizmos() {
-        if (boxCollider && body) {
+        if (showGroundCheck && boxCollider && body) {
             Vector2 pos = GetGroundCheckPos();
             Gizmos.DrawLine(pos, new Vector2(pos.x, pos.y - groundCheckLen));
         }

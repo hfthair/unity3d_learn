@@ -53,7 +53,9 @@ public class Hero : MonoBehaviour {
 
     public void FixedUpdate() {
         if (health <= 0) {
-            body.velocity = new Vector2(0, body.velocity.y);
+            if (Time.time - knockBackTime >= knockBackDuration) {
+                body.velocity = new Vector2(0, body.velocity.y);
+            }
             return;
         }
         if (Time.time - knockBackTime < knockBackDuration) {
@@ -61,8 +63,8 @@ public class Hero : MonoBehaviour {
         } else {
             body.velocity = new Vector2(move.x, body.velocity.y);
             if (move.y > 0) {
-                 body.velocity = new Vector2(body.velocity.x, move.y);
-                 move.y = 0;
+                body.velocity = new Vector2(body.velocity.x, move.y);
+                move.y = 0;
             }
         }
     }
@@ -142,7 +144,7 @@ public class Hero : MonoBehaviour {
 
     private bool IsGrounded() {
         RaycastHit2D[] results = new RaycastHit2D[16];
-        int count = body.Cast(Vector2.down, results, 0.01f);
+        int count = body.Cast(Vector2.down, results, 0.1f);
 
         return count > 0;
     }
