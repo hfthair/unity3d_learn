@@ -8,13 +8,15 @@ public class Hero : MonoBehaviour {
     public float jumpModifier = 0.5f;
 
     public int healthMax = 100;
-    private int health;
+    public int health {get; set;}
 
     public Transform attackPos;
     public Vector2 attackSize;
     public LayerMask attackLayer;
     public float attackInterval = 1f;
     public int attackPower = 20;
+
+    public int group = 0;
 
     public bool showAttackArea = false;
 
@@ -130,6 +132,7 @@ public class Hero : MonoBehaviour {
     }
 
     public void Die() {
+        health = 0;
         anim.SetFloat("speed", 0);
         anim.SetTrigger("die");
         // Disable control (maybe seperate the move/input to another script)
@@ -140,6 +143,9 @@ public class Hero : MonoBehaviour {
     private void AttackHitBoxCheck() {
         Collider2D[] detected = Physics2D.OverlapBoxAll(attackPos.position, attackSize, 0, attackLayer);
         foreach (Collider2D target in detected) {
+            if (target.gameObject.GetComponent<Hero>().group == group) {
+                continue;
+            }
             int[] attackMessage = new int[2];
             attackMessage[0] = attackPower;
             attackMessage[1] = 1;
@@ -148,6 +154,16 @@ public class Hero : MonoBehaviour {
             }
             target.transform.SendMessage("TakeDamage", attackMessage);
         }
+    }
+
+    public bool AttackHitBoxTest(GameObject obj) {
+        Collider2D[] detected = Physics2D.OverlapBoxAll(attackPos.position, attackSize, 0, attackLayer);
+        foreach (Collider2D target in detected) {
+            if (target.gameObject == obj) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private bool IsGrounded() {
