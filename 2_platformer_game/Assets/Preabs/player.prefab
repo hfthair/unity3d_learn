@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &569013415
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 569013416}
+  m_Layer: 3
+  m_Name: firePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &569013416
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 569013415}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.33, y: 1.32, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 1241967643592575546}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1241967643086400694
 GameObject:
   m_ObjectHideFlags: 0
@@ -24,7 +54,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241967643086400694}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.17, y: -0.26, z: 0}
+  m_LocalPosition: {x: 4.29, y: -0.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 1241967643592575546}
@@ -58,11 +88,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1241967644136894423}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -3.34, y: 0.46043754, z: 0}
-  m_LocalScale: {x: 0.37793, y: 0.38265413, z: 0.37793}
+  m_LocalScale: {x: 0.37793, y: 0.38265413, z: 0}
   m_Children:
   - {fileID: 1241967643086400693}
+  - {fileID: 569013416}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -195,18 +226,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4580792c317f4d049b8464dcad58bee1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  walkSpeed: 10
+  walkSpeed: 6
   jumpSpeed: 22
   jumpModifier: 0.5
   healthMax: 100
-  attackPos: {fileID: 0}
-  attackSize: {x: 0, y: 0}
+  attackPos: {fileID: 1241967643086400693}
+  firePos: {fileID: 569013416}
+  attackSize: {x: 3.25, y: 1.51}
   attackLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   attackInterval: 1
-  attackPower: 20
-  group: 0
+  attackPower: 30
+  fireball: {fileID: 6426047166253296469, guid: 896c9ccef0a4007449ad4991c3e0e18d, type: 3}
+  fireballSpeed: 10
+  fireballDamage: 10
   showAttackArea: 0
   knockBackForce: 2
   knockBackDuration: 0.5

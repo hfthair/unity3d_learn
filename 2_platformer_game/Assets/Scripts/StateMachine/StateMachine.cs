@@ -5,9 +5,11 @@ using UnityEngine;
 public class StateMachine
 {
     private StateBase currentState;
-
-    public void Init(StateBase state) {
+    private bool printState = false;
+    
+    public void Init(StateBase state, bool debug) {
         currentState = state;
+        printState = debug;
         currentState.OnEnter();
     }
 
@@ -15,6 +17,9 @@ public class StateMachine
         if (currentState != null) currentState.OnExit();
         currentState = state;
         currentState.OnEnter();
+        if (printState) {
+            Debug.Log("StateMachine enter: " + currentState.GetType().Name);
+        }
     }
 
     public void Update() {

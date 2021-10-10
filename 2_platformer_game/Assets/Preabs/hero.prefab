@@ -1,5 +1,35 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &456624895
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 456624896}
+  m_Layer: 3
+  m_Name: firePos
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &456624896
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 456624895}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 3.33, y: 1.32, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 8683400126358582441}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8683400126921494852
 GameObject:
   m_ObjectHideFlags: 0
@@ -28,11 +58,12 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8683400126921494852}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -14.1, y: 4.17, z: 41.37983}
   m_LocalScale: {x: 0.37793, y: 0.38265413, z: 0}
   m_Children:
   - {fileID: 8683400127869850150}
+  - {fileID: 456624896}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -170,23 +201,32 @@ MonoBehaviour:
   jumpModifier: 0.5
   healthMax: 100
   attackPos: {fileID: 8683400127869850150}
-  attackSize: {x: 2.8, y: 1.51}
+  firePos: {fileID: 456624896}
+  attackSize: {x: 3.25, y: 1.51}
   attackLayer:
     serializedVersion: 2
     m_Bits: 8
   attackInterval: 1
   attackPower: 20
-  group: 1
+  fireball: {fileID: 6426047166253296469, guid: 896c9ccef0a4007449ad4991c3e0e18d, type: 3}
+  fireballSpeed: 10
+  fireballDamage: 10
   showAttackArea: 0
-  knockBackForce: 6
+  knockBackForce: 3
   knockBackDuration: 0.5
   aiGroundDetectDepth: 0.2
-  showAiGroundDetect: 1
+  showAiGroundDetect: 0
   aiGroundMask:
     serializedVersion: 2
     m_Bits: 64
-  aiEnemyDetectLength: 5
-  showAiEnemyDetect: 1
+  printState: 0
+  aiWallDetectDepth: 0.2
+  aiWallDetecHeight: 0.2
+  showAiWallDetect: 0
+  aiFireDetectLength: 10
+  showAiFireballDetect: 0
+  aiEnemyDetectLength: 11
+  showAiEnemyDetect: 0
   aiEnemyDetectMask:
     serializedVersion: 2
     m_Bits: 8
@@ -214,7 +254,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8683400127869850149}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.17, y: -0.26, z: 0}
+  m_LocalPosition: {x: 4.29, y: -0.26, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 8683400126358582441}

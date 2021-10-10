@@ -11,23 +11,28 @@ public class Hero : MonoBehaviour {
     public int health {get; set;}
 
     public Transform attackPos;
+    public Transform firePos;
     public Vector2 attackSize;
     public LayerMask attackLayer;
     public float attackInterval = 1f;
     public int attackPower = 20;
 
-    public int group = 0;
+    public GameObject fireball;
+    public float fireballSpeed = 10f;
+    public int fireballDamage = 10;
 
     public bool showAttackArea = false;
 
     private float lastAttackTime = 0f;
+    private bool isAttacking = false;
 
     public float knockBackForce = 2f;
     public float knockBackDuration = 0.5f;
     private float knockBackTime = 0f;
 
-    private Rigidbody2D body;
-    private Animator anim;
+    protected Rigidbody2D body;
+    protected Animator anim;
+    protected BoxCollider2D boxCollider;
 
     private Vector2 move = new Vector2(0, 0);
 
@@ -35,6 +40,7 @@ public class Hero : MonoBehaviour {
     protected virtual void Start() {
         body = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        boxCollider = GetComponent<BoxCollider2D>();
 
         health = healthMax;
     }
@@ -77,10 +83,17 @@ public class Hero : MonoBehaviour {
     }
 
     // --------------------------- controls ---------------------------------------
-    public void Move(bool right) {
+    public void MoveLeft() {
         if (health <= 0) return;
-        if (right) move.x = walkSpeed;
-        else move.x = -walkSpeed;
+        if (isAttacking) return;
+        move.x = -walkSpeed;
+        anim.SetFloat("speed", Mathf.Abs(move.x));
+    }
+
+    public void MoveRight() {
+        if (health <= 0) return;
+        if (isAttacking) return;
+        move.x = walkSpeed;
         anim.SetFloat("speed", Mathf.Abs(move.x));
     }
 
@@ -92,6 +105,7 @@ public class Hero : MonoBehaviour {
 
     public void Jump() {
         if (health <= 0) return;
+        if (isAttacking) return;
         if (IsGrounded()) {
             move.y = jumpSpeed;
         }
@@ -115,6 +129,7 @@ public class Hero : MonoBehaviour {
     }
 
     private void KnockBack(bool toRight) {
+        isAttacking = false;
         knockBackTime = Time.time;
         if (toRight) {
             body.velocity = new Vector2(knockBackForce, body.velocity.y);
@@ -126,7 +141,20 @@ public class Hero : MonoBehaviour {
     public void Attack() {
         if (health <= 0) return;
         if (Time.time - lastAttackTime > attackInterval) {
+            Stop();
             anim.SetTrigger("attack");
+            isAttacking = true;
+            lastAttackTime = Time.time;
+        }
+    }
+
+    public void Fire() {
+        if (health <=0) return;
+        if (Time.time - lastAttackTime > attackInterval && firePos != null) {
+            Stop();
+            anim.SetTrigger("fire");
+
+            isAttacking = true;
             lastAttackTime = Time.time;
         }
     }
@@ -135,15 +163,39 @@ public class Hero : MonoBehaviour {
         health = 0;
         anim.SetFloat("speed", 0);
         anim.SetTrigger("die");
-        // Disable control (maybe seperate the move/input to another script)
     }
 
     // --------------------------- controls ends ----------------------------------
 
+    public bool isFacingRight() {
+        return transform.eulerAngles.y <= 1f;
+    }
+
+    public GameObject Group() {
+        return transform.parent.gameObject;
+    }
+
+    public void OnAttackAnimEnd() {
+        isAttacking = false;
+    }
+
+    private void FireballShoot() {
+        GameObject ball = Instantiate(fireball, firePos.position, Quaternion.identity);
+        Collider2D[] colliders = transform.parent.GetComponentsInChildren<Collider2D>();
+        foreach(Collider2D collider in colliders) {
+            Physics2D.IgnoreCollision(ball.GetComponent<Collider2D>(), collider);
+        }
+
+        if (!isFacingRight()) {
+            ball.GetComponent<FireballController>().Fire(Vector2.left, this);
+        }
+        else ball.GetComponent<FireballController>().Fire(Vector2.right, this);
+    }
+
     private void AttackHitBoxCheck() {
         Collider2D[] detected = Physics2D.OverlapBoxAll(attackPos.position, attackSize, 0, attackLayer);
         foreach (Collider2D target in detected) {
-            if (target.gameObject.GetComponent<Hero>().group == group) {
+            if (target.GetComponent<Hero>() == null || target.GetComponent<Hero>().Group() == Group()) {
                 continue;
             }
             int[] attackMessage = new int[2];
@@ -152,7 +204,7 @@ public class Hero : MonoBehaviour {
             if (transform.eulerAngles.y > 1) {
                 attackMessage[1] = -1;
             }
-            target.transform.SendMessage("TakeDamage", attackMessage);
+            target.SendMessage("TakeDamage", attackMessage);
         }
     }
 

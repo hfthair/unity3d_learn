@@ -17,8 +17,10 @@ public class PlayerController : Hero
         base.Update();
         // move
         float x = Input.GetAxisRaw("Horizontal");
-        if (x != 0) {
-            Move(x > 0);
+        if (x > 0.01f) {
+            MoveRight();
+        } else if (x < -0.01f) {
+            MoveLeft();
         } else {
             Stop();
         }
@@ -32,8 +34,11 @@ public class PlayerController : Hero
         }
 
         // attack
-        if (Input.GetKey("j")) {
+        if (Input.GetKey("j") || Input.GetButton("Fire1")) {
             Attack();
+        }
+        if (Input.GetKey("k") || Input.GetButton("Fire2")) {
+            Fire();
         }
     }
 
