@@ -5,12 +5,16 @@
 ## Goals
 
 - [x] Single scene game
-- [ ] Scrolling background
-- [ ] More charater controls
-- [ ] More animations
-- [ ] Enemy with AI
-- [ ] Maybe can attack with weapon (melee and ranged)
-- [ ] ...
+- [x] Scrolling background
+- [x] More charater controls
+- [x] More animations
+- [x] Enemy with AI
+- [x] Maybe can attack with weapon (melee and ranged)
+
+### TODOs
+- [ ] Audio
+- [ ] AI should pause before enter camera
+- [ ] Some UI? switch charators
 
 ## Notes
 - Cinemachin Camera and confiner
