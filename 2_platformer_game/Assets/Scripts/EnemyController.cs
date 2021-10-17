@@ -25,7 +25,10 @@ public class EnemyController : Hero {
     // Start is called before the first frame update
     protected override void Start() {
         base.Start();
+        stateMachine = null;
+    }
 
+    protected void InitStateMachine() {
         stateMachine = new StateMachine();
 
         statePatrol = new StatePatrol(stateMachine, this);
@@ -37,6 +40,8 @@ public class EnemyController : Hero {
         base.Update();
         if (stateMachine != null) {
             stateMachine.Update();
+        } else if (GetComponent<Renderer>().isVisible) {
+            InitStateMachine();
         }
     }
 

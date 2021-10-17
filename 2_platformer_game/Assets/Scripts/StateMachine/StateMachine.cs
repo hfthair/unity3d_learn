@@ -23,7 +23,6 @@ public class StateMachine
     }
 
     public void Update() {
-        // Stop if too far from the cam
         if (currentState != null) {
             currentState.Update();
         }

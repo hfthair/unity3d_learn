@@ -16,6 +16,7 @@ public class Hero : MonoBehaviour {
     public LayerMask attackLayer;
     public float attackInterval = 1f;
     public int attackPower = 20;
+    public AudioClip attackSound;
 
     public GameObject fireball;
     public float fireballSpeed = 10f;
@@ -193,6 +194,9 @@ public class Hero : MonoBehaviour {
     }
 
     private void AttackHitBoxCheck() {
+        if (attackSound && GetComponent<AudioSource>()) {
+            GetComponent<AudioSource>().PlayOneShot(attackSound);
+        }
         Collider2D[] detected = Physics2D.OverlapBoxAll(attackPos.position, attackSize, 0, attackLayer);
         foreach (Collider2D target in detected) {
             if (target.GetComponent<Hero>() == null || target.GetComponent<Hero>().Group() == Group()) {

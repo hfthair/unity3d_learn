@@ -12,8 +12,8 @@
 - [x] Maybe can attack with weapon (melee and ranged)
 
 ### TODOs
-- [ ] Audio
-- [ ] AI should pause before enter camera
+- [x] Audio
+- [x] AI should pause before enter camera
 - [ ] Some UI? switch charators
 
 ## Notes
